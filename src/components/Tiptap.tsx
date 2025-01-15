@@ -3,11 +3,7 @@ import "./styles.scss";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { Markdown } from "tiptap-markdown";
-
-const markdown = `
-# Title
-## Subtitle
-`;
+import markdown from "./markdown.md?raw";
 
 export default () => {
   const editor = useEditor({

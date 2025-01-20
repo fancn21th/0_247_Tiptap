@@ -8,7 +8,7 @@ export type Range = {
 };
 
 export type EditorContextType = {
-  editor: ReturnType<typeof useEditor>;
+  editor: ReturnType<typeof useEditor> | null;
   selectionRange: Range | null;
 };
 
@@ -19,27 +19,36 @@ export const EditorContext = createContext<EditorContextType>(
 export const EditorProvider = ({ children }: { children: ReactNode }) => {
   const [selectionRange, setSelectionRange] = useState<Range | null>(null);
 
+  // 初始化 Tiptap 编辑器
   const editor = useEditor({
     extensions: [StarterKit],
     content: `
         <p>
-          Hey, try to select some text here. There will popup a menu for selecting some inline styles. Remember: you have full control about content and styling of this menu.
+          Hey, try to select some text here. There will popup a menu for selecting some inline styles.
         </p>
       `,
   });
 
+  // 监听编辑器的选区变化
   useEffect(() => {
-    if (editor) {
+    if (!editor) return;
+
+    const handleSelectionUpdate = () => {
       const { from, to } = editor.state.selection;
       if (from !== to) {
         setSelectionRange({ from, to });
+      } else {
+        setSelectionRange(null); // 如果未选中文本，则清空选区
       }
-    }
-  }, [editor.state.selection]);
+    };
 
-  useEffect(() => {
-    console.log("selectionRange", selectionRange);
-  }, [selectionRange]);
+    // 监听选区更新事件
+    editor.on("selectionUpdate", handleSelectionUpdate);
+
+    return () => {
+      editor.off("selectionUpdate", handleSelectionUpdate); // 清理事件
+    };
+  }, [editor]);
 
   return (
     <EditorContext.Provider value={{ editor, selectionRange }}>

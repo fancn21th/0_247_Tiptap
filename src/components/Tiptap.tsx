@@ -2,9 +2,14 @@ import "./styles.scss";
 
 import { BubbleMenu, EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 const TiptapComponent = () => {
+  const [selectionRange, setSelectionRange] = useState<{
+    from: number;
+    to: number;
+  } | null>(null);
+
   const editor = useEditor({
     extensions: [StarterKit],
     content: `
@@ -21,6 +26,19 @@ const TiptapComponent = () => {
       editor.setEditable(isEditable);
     }
   }, [isEditable, editor]);
+
+  useEffect(() => {
+    if (editor) {
+      const { from, to } = editor.state.selection;
+      if (from !== to) {
+        setSelectionRange({ from, to });
+      }
+    }
+  }, [editor.state.selection]);
+
+  useEffect(() => {
+    console.log({ selectionRange });
+  }, [selectionRange]);
 
   return (
     <>

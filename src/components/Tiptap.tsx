@@ -1,23 +1,13 @@
 import "./styles.scss";
 
-import { BubbleMenu, EditorContent, useEditor } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
-import React, { useEffect, useState } from "react";
+import { BubbleMenu, EditorContent } from "@tiptap/react";
+import React, { useContext, useEffect } from "react";
+import { EditorContext } from "./Context";
 
 const TiptapComponent = () => {
-  const [selectionRange, setSelectionRange] = useState<{
-    from: number;
-    to: number;
-  } | null>(null);
+  console.log("TiptapComponent");
 
-  const editor = useEditor({
-    extensions: [StarterKit],
-    content: `
-      <p>
-        Hey, try to select some text here. There will popup a menu for selecting some inline styles. Remember: you have full control about content and styling of this menu.
-      </p>
-    `,
-  });
+  const { editor } = useContext(EditorContext);
 
   const [isEditable, setIsEditable] = React.useState(true);
 
@@ -26,19 +16,6 @@ const TiptapComponent = () => {
       editor.setEditable(isEditable);
     }
   }, [isEditable, editor]);
-
-  useEffect(() => {
-    if (editor) {
-      const { from, to } = editor.state.selection;
-      if (from !== to) {
-        setSelectionRange({ from, to });
-      }
-    }
-  }, [editor.state.selection]);
-
-  useEffect(() => {
-    console.log({ selectionRange });
-  }, [selectionRange]);
 
   return (
     <>

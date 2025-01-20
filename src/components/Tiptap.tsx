@@ -4,7 +4,7 @@ import { BubbleMenu, EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import React, { useEffect } from "react";
 
-export default () => {
+const TiptapComponent = () => {
   const editor = useEditor({
     extensions: [StarterKit],
     content: `
@@ -63,3 +63,5 @@ export default () => {
     </>
   );
 };
+
+export default TiptapComponent;

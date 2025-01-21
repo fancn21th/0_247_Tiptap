@@ -1,26 +1,23 @@
 import "./styles.scss";
 
-import Placeholder from "@tiptap/extension-placeholder";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
+import React from "react";
+
+import ReactComponent from "./Extension.js";
 
 export default () => {
   const editor = useEditor({
-    extensions: [
-      StarterKit,
-      Placeholder.configure({
-        // Use a placeholder:
-        placeholder: "Write something …",
-        // Use different placeholders depending on the node type:
-        // placeholder: ({ node }) => {
-        //   if (node.type.name === 'heading') {
-        //     return 'What’s the title?'
-        //   }
-
-        //   return 'Can you add some further context?'
-        // },
-      }),
-    ],
+    extensions: [StarterKit, ReactComponent],
+    content: `
+    <p>
+      This is still the text editor you’re used to, but enriched with node views.
+    </p>
+    <react-component count="0"></react-component>
+    <p>
+      Did you see that? That’s a React component. We are really living in the future.
+    </p>
+    `,
   });
 
   return <EditorContent editor={editor} />;
